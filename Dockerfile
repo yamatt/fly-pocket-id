@@ -1,1 +1,1 @@
-FROM ghcr.io/pocket-id/pocket-id:v1.0.0
+FROM ghcr.io/pocket-id/pocket-id:v1.13.1
