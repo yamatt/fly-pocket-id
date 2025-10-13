@@ -17,38 +17,13 @@ jobs:
     steps:
       - uses: actions/checkout@v5
       - uses: superfly/flyctl-actions/setup-flyctl@master
-      - name: Get current volume ID
-        id: source_volume
+      - name: Get data
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
         run: |
-          echo "source_volume_id=$(flyctl volumes list --app "${{ secrets.FLY_APP_NAME }}" --json | jq -r '.[0].id')" >> $GITHUB_OUTPUT
-      - name: Fork volume and create ephemeral machine
-        id: forked_source_volume
-        env:
-          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
-        run: |
-          echo "forked_volume_id=$(flyctl volumes fork "${{ steps.source_volume.outputs.source_volume_id }}" --app "${{ secrets.FLY_APP_NAME }}" --name "auth_backup" --json | jq -r '.id')" >> $GITHUB_OUTPUT
-      - name: Setup temporary machine
-        id: temp_machine
-        env:
-          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
-        run: |
-          flyctl machine create alpine:latest "sleep 60" \
-            --name "auth-backup"
-            --app "${{ secrets.FLY_APP_NAME }}" \
-            --volume "${{ steps.forked_source_volume.outputs.forked_volume_id }}":/data
-          echo "machine_id=$(flyctl machines list --app "${{ secrets.FLY_APP_NAME }}" --json | jq -r '.[] | select(.name=="auth-backup") | .id')" >> $GITHUB_OUTPUT
-      - name: Copy data from Fly volume to runner
-        run: |
-          fly machine start --app "${{ secrets.FLY_APP_NAME }}" "${{ steps.temp_machine.outputs.machine_id }}"
-          flyctl ssh sftp get --app "${{ secrets.FLY_APP_NAME }}" --machine "${{ steps.temp_machine.outputs.machine_id }}" /data ./data --recursive
+          flyctl machine start --app "${{ secrets.FLY_APP_NAME }}"
+          flyctl ssh sftp get --app "${{ secrets.FLY_APP_NAME }}" /data ./data --recursive
       - name: Upload to B2
         run: |
           rclone config create b2remote b2 account=${B2_ACCOUNT_ID} key=${B2_ACCOUNT_KEY}
           rclone sync ./data b2remote:${B2_BUCKET}/${BACKUP_PATH}/ --fast-list --transfers 8 --checkers 8
-      - name: Cleanup Fly resources
-        if: always()
-        run: |
-          fly machine destroy --app "${{ secrets.FLY_APP_NAME }}" --machine "${{ steps.temp_machine.outputs.machine_id }}" --force
-          fly volumes destroy "${{ steps.forked_source_volume.outputs.forked_volume_id }}" --yes
