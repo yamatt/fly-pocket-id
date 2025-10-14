@@ -32,7 +32,7 @@ jobs:
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
         run: |
-          flyctl ssh sftp get --app "${{ secrets.FLY_APP_NAME }}" /data ./data --recursive
+          flyctl ssh sftp get --app "${{ secrets.FLY_APP_NAME }}" /app/data ./data --recursive
       - name: Upload to B2
         run: |
           rclone config create b2remote b2 account=${B2_ACCOUNT_ID} key=${B2_ACCOUNT_KEY}
