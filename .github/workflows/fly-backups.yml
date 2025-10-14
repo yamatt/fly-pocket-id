@@ -41,4 +41,4 @@ jobs:
           RCLONE_B2_ACCOUNT: "${{ secrets.B2_ACCOUNT_ID }}"
           RCLONE_B2_KEY: "${{ secrets.B2_ACCOUNT_KEY }}"
         run: |
-          rclone sync ./data "b2:${{ secrets.B2_BUCKET_NAME }}/auth/"
+          rclone sync ./data ":b2:${{ secrets.B2_BUCKET_NAME }}/auth/"
