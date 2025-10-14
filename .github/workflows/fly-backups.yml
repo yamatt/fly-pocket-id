@@ -35,7 +35,7 @@ jobs:
           flyctl ssh sftp get --app "${{ secrets.FLY_APP_NAME }}" /app/data ./data --recursive
       - name: Install rclone
         run: |
-          sudo apt-get install rclone
+          sudo apt-get update && sudo apt-get install -y rclone
       - name: Upload to B2
         env:
           RCLONE_B2_ACCOUNT: "${{ secrets.B2_ACCOUNT_ID }}"
