@@ -1,1 +1,1 @@
-FROM ghcr.io/pocket-id/pocket-id@sha256:a073640418b2cfc8587c488a7270580b3ab95cae2c543f5d64bbbe1fd7ccbae8
+FROM ghcr.io/pocket-id/pocket-id@sha256:6a3aad6023ea0729e3763c75b77060d6d5d9069ad566af0b0b14a2288da0c9e0
