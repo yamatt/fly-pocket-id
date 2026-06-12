@@ -1,2 +1,0 @@
-# Litestream native process supervision:
-exec: "/app/pocket-id"
