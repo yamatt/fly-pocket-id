@@ -8,9 +8,6 @@ WORKDIR /app
 COPY --from=pocket-id /app /app
 COPY --from=litestream /usr/local/bin/litestream /usr/local/bin/litestream
 
-# Copy your local Litestream configuration file
-COPY config/litestream.yml /etc/litestream.yml
-
 # Stick to UID 1000 to match your Fly volume permissions perfectly
 USER 1000
 
