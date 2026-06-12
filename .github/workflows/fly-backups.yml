@@ -2,6 +2,7 @@
 
 name: Backup data
 on:
+  workflow_dispatch:
   push:
     branches:
       - main
