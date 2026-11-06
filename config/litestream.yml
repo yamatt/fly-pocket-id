@@ -1,2 +1,22 @@
+# /app/litestream.yml
+# Pass these credentials via Fly.io secrets (LITESTREAM_B2_ACCESS_KEY_ID, etc.)
+access-key-id: ${LITESTREAM_B2_ACCESS_KEY_ID}
+secret-access-key: ${LITESTREAM_B2_SECRET_ACCESS_KEY}
+
+dbs:
+  - path: /app/data/pocket-id.db
+    replicas:
+      - type: s3
+        bucket: backups-v2-nee7yoo0
+        path: auth/litestream
+        endpoint: s3.us-west-001.backblazeb2.com
+
+        sync-interval: 1m # Check for new data every 1 minute instead of 10 seconds
+        checkpoint-interval: 1m # Force a WAL checkpoint and push to B2 every 1 minute
+
+        # Bucket handles retention
+        retention: 0h
+        snapshot-retention: 0h
+
 # Litestream native process supervision:
 exec: "/app/pocket-id"
