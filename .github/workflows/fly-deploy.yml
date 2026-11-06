@@ -11,6 +11,11 @@ on:
       - ".github/workflows/fly-deploy.yml"
       - "scripts/**"
       - "services/**"
+  workflow_run:
+    workflows:
+      - Auto-merge
+    types:
+      - completed
 
 permissions:
   contents: read
