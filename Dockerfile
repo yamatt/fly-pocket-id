@@ -1,4 +1,6 @@
+# pocket-id v2.19.2
 FROM ghcr.io/pocket-id/pocket-id@sha256:3ee23895d6a3adb5dd5de801a4fd31fc31b960e6dfbea9b5200e33cf477695eb AS pocket-id
+# litestream v0.5.17-scratch
 FROM litestream/litestream@sha256:f757c70d070ac278d45b8847d31a54ab2de24de5e77b09018c642eca263e3967 AS litestream
 
 FROM gcr.io/distroless/static@sha256:448810357cc8e67b7208988abdba0f5ec3d3aebee0a5b13eb624979792cffc0f
